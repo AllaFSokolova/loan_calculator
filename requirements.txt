@@ -1,4 +1,4 @@
-streamlit
-pandas
-pyxirr
-Pillow
+streamlit==1.21.0
+pandas==2.0.3
+pyxirr==1.0.5
+Pillow==9.5.0
