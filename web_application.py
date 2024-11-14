@@ -32,8 +32,8 @@ st.subheader("Введите параметры для интервалов:")
 num_intervals = st.number_input("Количество интервалов:", value=3, min_value=1, max_value=30, step=1)
 
 days = [0] * num_intervals
-rates = [0.0] * num_intervals
-supports = [0.0] * num_intervals
+rates = [0.0000] * num_intervals
+supports = [0.0000] * num_intervals
 bodies = [0] * num_intervals
 
 for i in range(num_intervals):
@@ -79,6 +79,7 @@ def build_payments_schema(interval_params, comission, payment_period, loan_perio
     coeficients, rates, supports, comissions, bodies, sums = [], [], [], [], [], []
     
     for days, rate, support, body in interval_params:
+        days[0] = max(days[0], payment_period)
         i = 0
         body_list = []
         
