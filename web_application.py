@@ -23,7 +23,7 @@ product_4_5 = st.checkbox("Продукт 4 / 5", value=False)
 dynamic_body_paments = st.checkbox("Предусмотрены частичные погашения тела", value=True)
 accrued_period = st.number_input("Начисления процентов раз в (дни):", value=1, min_value=1)
 accrued_end = st.selectbox("Начисления по принципу:", options=[0, 1, 2],
-                            format_func=lambda x: {0: "Начисления на конец начала периода",
+                            format_func=lambda x: {0: "Начисления на начало периода",
                                                     1: "Начисления на конец периода",
                                                     2: "Начисления по принципу нашего продукта"}[x],
     index=2)
