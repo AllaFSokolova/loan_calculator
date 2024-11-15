@@ -14,13 +14,13 @@ img_resized = img.resize((600, 350))
 st.image(img_resized, use_column_width=True)
 
 # ----------------------->>>>>>>>>>>>  Initial Parameters  <<<<<<<<<<<------------------------------
-start_date = st.date_input("Дата начала кредита:", value=datetime(2024, 10, 24))
+start_date = st.date_input("Дата начала кредита:", value=datetime.today().date())
 payment_period = st.number_input("Период платежа (в днях):", value=30, min_value=1)
 loan_period = st.number_input("Срок кредита (в днях):", value=360, min_value=1)
 amount = st.number_input("Сумма:", value=1000, min_value=0)
 comission = st.number_input("Разовая комиссия (%):", value=5)
 product_4_5 = st.checkbox("Продукт 4 / 5", value=False)
-dynamic_body_paments = st.checkbox("Предусмотрены частичные погашения тела", value=True)
+dynamic_body_paments = st.checkbox("Предусмотрены частичные погашения тела", value=False)
 accrued_period = st.number_input("Начисления процентов раз в (дни):", value=1, min_value=1)
 accrued_end = st.selectbox("Начисления по принципу:", options=[0, 1, 2],
                             format_func=lambda x: {0: "Начисления на начало периода",
@@ -43,10 +43,10 @@ for i in range(num_intervals):
         days[i] = st.number_input(f"К-во дней, # {i + 1}:", value=days[i], min_value=0)
 
     with col2:
-        rates[i] = st.number_input(f"Ставка, # {i + 1} (%)", value=rates[i], min_value=0.0)
+        rates[i] = st.number_input(f"Ставка, # {i + 1} (%)", value=rates[i], min_value=0.0000, format="%.4f")
 
     with col3:
-        supports[i] = st.number_input(f"Комиссия за обслуживание, # {i + 1} (%)", value=supports[i], min_value=0.0)
+        supports[i] = st.number_input(f"Комиссия за обслуживание, # {i + 1} (%)", value=supports[i], min_value=0.0000, format="%.4f")
 
     with col4:
         bodies[i] = st.number_input(f"Процент от тела для интервала №{i + 1}:", value=bodies[i], min_value=0)
@@ -75,7 +75,7 @@ def build_payments_schema(interval_params, comission, payment_period, loan_perio
     total_sum = 0
     period = payment_period
     local_comission = comission
-    percents_per_year = loan_period - 3
+    percents_per_year = 0.98 * (loan_period + 1) # loan_period - 3
     coeficients, rates, supports, comissions, bodies, sums = [], [], [], [], [], []
     
     for days, rate, support, body in interval_params:
@@ -183,7 +183,8 @@ def adding_dates(df, start_date, payment_period):
     return df
 
 def last_rate_calculation(df, payment_calendar):
-    rest_percent = ((loan_period - 3) - sum(df['Проценты начисленые']))*(1 - sum(df['Сума по телу в процентах']) / 100)
+    rest_percent = ((0.98 * (loan_period + 1)) - sum(df['Проценты начисленые']))*(1 - sum(df['Сума по телу в процентах']) / 100)
+    # rest_percent = ((loan_period - 3) - sum(df['Проценты начисленые']))*(1 - sum(df['Сума по телу в процентах']) / 100)
 
     max_date_df = pd.to_datetime(max(df.date))
     max_date_payment_date = pd.to_datetime(max(payment_calendar.payment_date))
@@ -192,7 +193,7 @@ def last_rate_calculation(df, payment_calendar):
     if rest_days == 0:
         last_percent = 0 
     else:
-        last_percent = rest_percent / rest_days
+        last_percent = ((rest_percent / rest_days)*100//1)/100
     return last_percent
 
 def product_constructor(df, payment_calendar_df, amount, comission, payment_period, last_rate):
@@ -275,6 +276,7 @@ def rates_schema (product_4_5, dynamic_body_paments, interval_params, start_date
     if product_4_5:
         df, payment_schema = result_function (dynamic_body_paments, interval_params, start_date, payment_period, loan_period, amount, comission)
         df.loc[df.index[-1], 'rate'] = 1.0
+        df.loc[df.index[-2], 'rate'] = 1.0
         print("Product 4-5")
     else:
         df, payment_schema = result_function (dynamic_body_paments, interval_params, start_date, payment_period, loan_period, amount, comission)
