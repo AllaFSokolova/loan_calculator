@@ -75,7 +75,7 @@ def build_payments_schema(interval_params, comission, payment_period, loan_perio
     total_sum = 0
     period = payment_period
     local_comission = comission
-    percents_per_year = 0.98 * (loan_period + 1) # loan_period - 3
+    percents_per_year = loan_period - 3
     coeficients, rates, supports, comissions, bodies, sums = [], [], [], [], [], []
     
     for days, rate, support, body in interval_params:
@@ -132,7 +132,7 @@ def build_payments_schema(interval_params, comission, payment_period, loan_perio
         'Сума по телу в процентах': body_list
     })
     
-    if total_sum > percents_per_year:
+    if total_sum > percents_per_year and len(days) > 1:
         last_row = base_df.iloc[-1].copy()
         last_row['Проценты начисленые'] = percents_per_year - sum(base_df.iloc[:-1]['Проценты начисленые'])
         
@@ -141,8 +141,8 @@ def build_payments_schema(interval_params, comission, payment_period, loan_perio
                 last_row['Ставка'] * (1 - sum(base_df.iloc[:-1]['Сума по телу в процентах'] / 100)) 
                 + last_row['Комиссия за обслуживание'] * (1 - sum(base_df.iloc[:-1]['Сума по телу в процентах'] / 100))
                 + last_row['Разовая комиссия'] * (1 - sum(base_df.iloc[:-1]['Сума по телу в процентах'] / 100))
-            ) / period // 1
-        )
+            ) / period
+        ).astype(int)  
         last_row['Проценты начисленые'] = (last_row['Коэфициент'] * period * last_row['Ставка'] +
                                            last_row['Коэфициент'] * period * last_row['Комиссия за обслуживание'] +
                                            last_row['Коэфициент'] * period * last_row['Разовая комиссия']
@@ -150,8 +150,20 @@ def build_payments_schema(interval_params, comission, payment_period, loan_perio
         
         base_df = base_df.iloc[:-1]
         base_df = pd.concat([base_df, pd.DataFrame([last_row])], ignore_index=True)
-
+        
+    elif total_sum > percents_per_year and len(days) == 1:
+        base_df['Коэфициент'] = (percents_per_year -  local_comission) / (period  * (base_df['Ставка'] + base_df['Комиссия за обслуживание']))//1
+        
+        base_df['Проценты начисленые'] = (
+        base_df['Коэфициент'] * period * base_df['Ставка'] +
+        base_df['Коэфициент'] * period * base_df['Комиссия за обслуживание'] +
+        local_comission
+        )   
+    else:
+        base_df = base_df
+    
     base_df = base_df[base_df['Коэфициент'] != 0]
+        
     
     return base_df
 
