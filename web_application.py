@@ -570,7 +570,7 @@ def second_part_df_builder (main_part, daily_percents_sum, start_date, loan_peri
     "XIRR день": round(xirr_day * 100, 2),
     "Платеж в первый период" : fist_payment,
     "Прибыль в первый период" : round(fist_payment / amount * 100, 2),
-    "Ежедневная прибыль в первый период" : round(fist_payment / amount / period * 100, 2),
+    "Ежедневная прибыль в первый период" : round(fist_payment / amount / loan_period * 100, 2),
     "Общие расходы по кредиту": round(cost, 2),
     "Общая стоимость по кредита": round(value, 2),
     "Среднедневная номинальная ставка": round(cost / amount / loan_period * 100, 4)
