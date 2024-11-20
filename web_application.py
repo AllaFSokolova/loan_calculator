@@ -560,7 +560,7 @@ def second_part_df_builder (main_part, daily_percents_sum, start_date, loan_peri
                                                     )
     
     
-    value = sum(merged_df.CF) - amount
+    value = sum(merged_df.CF) + amount
     cost = sum(merged_df.CF)
 
     results = {
