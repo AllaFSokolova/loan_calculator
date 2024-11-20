@@ -562,7 +562,8 @@ def second_part_df_builder (main_part, daily_percents_sum, start_date, loan_peri
     
     value = sum(merged_df.CF) + amount
     cost = sum(merged_df.CF)
-    fist_payment = merged_df['CF'][1]
+    fist_payment = merged_df['CF'][2] if merged_df['CF'][1] == 0 else merged_df['CF'][1]
+
 
     results = {
     "XIRR год": round(xirr_ * 100, 2),
