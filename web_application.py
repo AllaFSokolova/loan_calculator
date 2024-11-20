@@ -562,10 +562,12 @@ def second_part_df_builder (main_part, daily_percents_sum, start_date, loan_peri
     
     value = sum(merged_df.CF) + amount
     cost = sum(merged_df.CF)
+    fist_payment = merged_df['CF'][1]
 
     results = {
     "XIRR год": round(xirr_ * 100, 2),
     "XIRR день": round(xirr_day * 100, 2),
+    "Платеж в первый период" : fist_payment,
     "Общие расходы по кредиту": round(cost, 2),
     "Общая стоимость по кредита": round(value, 2),
     "Среднедневная номинальная ставка": round(cost / amount / loan_period * 100, 4)
