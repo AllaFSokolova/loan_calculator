@@ -578,6 +578,7 @@ def second_part_df_builder (main_part, daily_percents_sum, start_date, loan_peri
     st.write("-------------------------------- >>>>>>> Расчетные показатели <<<<<< -----------------------------------")
     st.write(f"XIRR год: {round(xirr_ * 100, 2)}%")
     st.write(f"XIRR день: {round(xirr_day * 100, 2)}%")
+    st.write(f"Платеж в первый период" : {fist_payment}")
     st.write(f"Общие расходы по кредиту: {round(cost, 2)} грн.")
     st.write(f"Общая стоимость кредита: {round(value, 2)} грн.")
     st.write(f"Среднедневная номинальная ставка: {round(cost / amount / loan_period * 100, 4)}%")
