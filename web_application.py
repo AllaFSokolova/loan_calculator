@@ -11,7 +11,7 @@ st.title("Кредитный калькулятор")
 
 img = Image.open('calculator.jpg')
 img_resized = img.resize((600, 350))
-st.image(img_resized, use_column_width=True)
+st.image(img_resized, use_container_width = True)
 
 # ----------------------->>>>>>>>>>>>  Initial Parameters  <<<<<<<<<<<------------------------------
 start_date = st.date_input("Дата начала кредита:", value=datetime.today().date())
