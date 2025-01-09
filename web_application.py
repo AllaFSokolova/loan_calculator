@@ -65,8 +65,10 @@ def payment_calendar_builder(start_date, payment_period, loan_period):
 
     while date < end_date:
         date = date + timedelta(days=payment_period)
-        if date <= end_date:
+        if date < end_date:
             payment_calendar.append(date)
+    
+    payment_calendar.append(end_date)
 
     df = pd.DataFrame(payment_calendar, columns=['payment_date'])
     return df
