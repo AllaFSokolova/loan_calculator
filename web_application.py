@@ -55,6 +55,27 @@ interval_params = [([days, rates, supports, bodies])]
 
 # ---------------------------->>>>>>>>>   Functions <<<<<<< ---------------------------------------
 def payment_calendar_builder(start_date, payment_period, loan_period):
+    """
+    Generate a payment calendar DataFrame based on a start date, payment period, and loan period.
+
+    Args:
+        start_date (str or datetime): The start date of the loan, either as a string in the format '%Y-%m-%d'
+                                      or a `datetime` object.
+        payment_period (int): The number of days between each payment.
+        loan_period (int): The total duration of the loan in days.
+
+    Returns:
+        pd.DataFrame: A DataFrame with a single column 'payment_date' containing the scheduled payment dates.
+                      The last date corresponds to the loan end date.
+
+    Example:
+        >>> payment_calendar_builder('2025-01-01', 30, 120)
+              payment_date
+        0  2025-01-01
+        1  2025-01-31
+        2  2025-03-02
+        3  2025-05-01
+    """
     if not isinstance(start_date, str):
         start_date = start_date.strftime('%Y-%m-%d')
         
