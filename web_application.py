@@ -219,6 +219,7 @@ def adding_dates(df, start_date, payment_period):
 
 def last_rate_calculation(df, payment_calendar):
     rest_percent = ((0.98 * (loan_period)) - sum(df['Проценты начисленые']))*(1 - sum(df['Сума по телу в процентах']) / 100)
+  # rest_percent = ((0.98 * (loan_period + 1)) - sum(df['Проценты начисленые']))*(1 - sum(df['Сума по телу в процентах']) / 100)
     # rest_percent = ((loan_period - 3) - sum(df['Проценты начисленые']))*(1 - sum(df['Сума по телу в процентах']) / 100)
 
     max_date_df = pd.to_datetime(max(df.date))
