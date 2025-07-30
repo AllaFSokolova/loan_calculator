@@ -611,6 +611,9 @@ def second_part_df_builder (main_part, daily_percents_sum, start_date, loan_peri
     st.write(f"Общие расходы по кредиту: {round(cost, 2)} грн.")
     st.write(f"Общая стоимость кредита: {round(value, 2)} грн.")
     st.write(f"Среднедневная номинальная ставка: {round(cost / amount / loan_period * 100, 4)}%")
+    st.write(f"Всего проценты: {sum(merged_df.CF_interest)}")
+    st.write(f"Всего комиссия за обслуживание: {sum(merged_df.CF_support)}")
+    st.write(f"Всего комиссия за выдачу: {sum(merged_df.CF_comission)}")
     
     return merged_df, metrics_df
 
