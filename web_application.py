@@ -18,7 +18,7 @@ start_date = st.date_input("Дата начала кредита:", value=dateti
 payment_period = st.number_input("Период платежа (в днях):", value=15, min_value=1)
 loan_period = st.number_input("Срок кредита (в днях):", value=360, min_value=1)
 amount = st.number_input("Сумма:", value=1000, min_value=0)
-comission = st.number_input("Разовая комиссия (%):", value=5)
+comission = st.number_input("Разовая комиссия (%):", value=25)
 product_4_5 = st.checkbox("Продукт 4 / 5", value=False)
 dynamic_body_paments = st.checkbox("Предусмотрены частичные погашения тела", value=False)
 accrued_period = st.number_input("Начисления процентов раз в (дни):", value=1, min_value=1)
